@@ -1,25 +1,11 @@
-use actix_web::{get, web::Path, App, HttpResponse, HttpServer, Responder};
+use actix_web::{ App, HttpServer};
 
-
-#[get("/home")]
-async fn home() -> impl Responder {
-    let response = "Welcome to Actix Web Server";
-    response
-}
-
-
-#[get("/hello/{firsname}/{lastname}")]
-async fn hello_user(params : Path<(String , String)>) -> impl Responder {
-    let response : String = format!("Hello {} {}" , params.0 , params.1);
-    // println!("{}" ,response);
-    // HttpResponse::Ok().body(response) 
-    response
-}
+mod routes;
+use routes::*;
 
 
 
-
-#[actix_web::main]
+#[tokio::main]
 async fn main() -> std::io::Result<()> {
     let server = HttpServer::new(|| App::new().service(home).service(hello_user)
     ).bind(("127.0.0.1" , 8000))?.run();
